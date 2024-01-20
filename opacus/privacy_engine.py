@@ -387,7 +387,6 @@ class PrivacyEngine:
         )
 
         return module, optimizer, data_loader
-
     def make_private_with_epsilon(
         self,
         *,
