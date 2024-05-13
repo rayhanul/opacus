@@ -63,7 +63,7 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
     model.train()
     criterion = nn.CrossEntropyLoss()
     losses = []
-    for _batch_idx, (data, target) in enumerate(tqdm(train_loader)):
+    for _batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
@@ -73,11 +73,14 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
         losses.append(loss.item())
 
     if not args.disable_dp:
-        epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
-        print(
-            f"Train Epoch: {epoch} \t"
-            f"Loss: {np.mean(losses):.6f} "
-            f"(ε = {epsilon:.2f}, δ = {args.delta})"
+        if args.type__accountant=='dma':
+            epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.001, time=epoch)
+        else:
+            epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
+            print(
+                f"Train Epoch: {epoch} \t"
+                f"Loss: {np.mean(losses):.6f} "
+                f"(ε = {epsilon:.2f}, δ = {args.delta})"
         )
     else:
         print(f"Train Epoch: {epoch} \t Loss: {np.mean(losses):.6f}")
@@ -207,6 +210,12 @@ def main():
         default="../mnist",
         help="Where MNIST is/will be stored",
     )
+    parser.add_argument(
+        "--type--accountant",
+        type=str,
+        default=False ,
+        help="R2DP",
+    )
     args = parser.parse_args()
     device = torch.device(args.device)
 
@@ -250,7 +259,7 @@ def main():
         privacy_engine = None
 
         if not args.disable_dp:
-            privacy_engine = PrivacyEngine(accountant="rdp", secure_mode=args.secure_rng)
+            privacy_engine = PrivacyEngine(accountant="ddp", secure_mode=args.secure_rng)
             model, optimizer, train_loader = privacy_engine.make_private(
                 module=model,
                 optimizer=optimizer,
@@ -261,6 +270,10 @@ def main():
 
         for epoch in range(1, args.epochs + 1):
             train(args, model, device, train_loader, optimizer, privacy_engine, epoch)
+            # if epoch%3==0:
+            #     optimizer.noise_multiplier=1.5
+            #     privacy_engine.accountant.history = []
+
         run_results.append(test(model, device, test_loader))
 
     if len(run_results) > 1:
@@ -283,6 +296,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=5', '--lr=.25', '--sigma=1.3', '-c=1.5', '-b=240']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=100', '--lr=.10', '--sigma=1.5', '-c=1.3', '-b=240', '--type--accountant=dma']
 
     main()
