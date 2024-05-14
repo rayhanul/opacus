@@ -16,7 +16,7 @@ from .accountant import IAccountant
 from .gdp import GaussianAccountant
 from .prv import PRVAccountant
 from .rdp import RDPAccountant
-
+from .ddp import DMAccountant
 
 __all__ = [
     "IAccountant",
@@ -32,5 +32,7 @@ def create_accountant(mechanism: str) -> IAccountant:
         return GaussianAccountant()
     elif mechanism == "prv":
         return PRVAccountant()
+    elif mechanism == "ddp":
+        return DMAccountant()
 
     raise ValueError(f"Unexpected accounting mechanism: {mechanism}")
