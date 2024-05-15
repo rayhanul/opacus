@@ -85,7 +85,7 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
     if not args.disable_dp:
         if args.type_accountant=='dma':
-            epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.001, time=epoch)
+            epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.01, time=epoch)
             print(
                 f"Train Epoch: {epoch} \t"
                 f"Loss: {np.mean(losses):.6f} "
