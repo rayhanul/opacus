@@ -84,7 +84,7 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
     accuracy = correct / len(train_loader.dataset)
 
     if not args.disable_dp:
-        if args.type__accountant=='dma':
+        if args.type_accountant=='dma':
             epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.001, time=epoch)
             print(
                 f"Train Epoch: {epoch} \t"
