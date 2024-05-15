@@ -22,6 +22,7 @@ __all__ = [
     "IAccountant",
     "GaussianAccountant",
     "RDPAccountant",
+    "DDPAccountant"
 ]
 
 
