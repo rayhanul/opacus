@@ -254,7 +254,7 @@ def main():
         help="Where MNIST is/will be stored",
     )
     parser.add_argument(
-        "--type--accountant",
+        "--type-accountant",
         type=str,
         default=False ,
         help="R2DP",
@@ -345,6 +345,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=1000', '--lr=.10', '-c=1.3', '-b=240', '--type--accountant=dma']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=1000', '--lr=.10', '-c=1.3', '-b=240', '--type-accountant=dma']
 
     main()
