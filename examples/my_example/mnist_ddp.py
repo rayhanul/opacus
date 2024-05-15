@@ -182,7 +182,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=10,
+        default=1000,
         metavar="N",
         help="number of epochs to train",
     )
@@ -345,6 +345,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=10', '--lr=.10', '--sigma=1.5', '-c=1.3', '-b=240', '--type--accountant=dma']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=1000', '--lr=.10', '-c=1.3', '-b=240', '--type--accountant=dma']
 
     main()

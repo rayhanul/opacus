@@ -168,7 +168,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=10,
+        default=1000,
         metavar="N",
         help="number of epochs to train",
     )
