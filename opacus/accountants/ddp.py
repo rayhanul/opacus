@@ -101,10 +101,10 @@ class DMAccountant(IAccountant):
         positive_epsilons = [(index, value) for index, value in enumerate(epsilons) if value > 0 ]
         min_value_with_index = min(positive_epsilons, key=lambda item: item[1])
 
-        print(f'time : {time} : {min_value_with_index[1] * len(self.history)}')
+        # print(f'time : {time} : {min_value_with_index[1] * len(self.history)}')
         if len(min_value_with_index) ==0: 
             return 0, 0
-        return float(min_value_with_index[0]), float(min_value_with_index[1]) * len(self.history)
+        return float(min_value_with_index[1]) * len(self.history), float(min_value_with_index[0])
 
 
 
