@@ -84,11 +84,12 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
     if not args.disable_dp:
         epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
-        print(
-            f"Train Epoch: {epoch} \t"
-            f"Loss: {np.mean(losses):.6f} "
-            f"(ε = {epsilon:.2f}, δ = {args.delta})"
-        )
+        if epoch%20==0:
+            print(
+                f"Train Epoch: {epoch} \t"
+                f"Loss: {np.mean(losses):.6f} "
+                f"(ε = {epsilon:.2f}, δ = {args.delta})"
+            )
         return {'epsilon': epsilon, 'acc': accuracy}
     else:
         print(f"Train Epoch: {epoch} \t Loss: {np.mean(losses):.6f}")
@@ -167,7 +168,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=100,
+        default=1000,
         metavar="N",
         help="number of epochs to train",
     )
@@ -189,7 +190,7 @@ def main():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=1.0,
+        default=1.2,
         metavar="S",
         help="Noise multiplier",
     )
@@ -295,9 +296,12 @@ def main():
             eps_acc_results.update({epoch:data})
         all_results.update({run: eps_acc_results})
         run_results.append(test(model, device, test_loader))
+        
     average_data= calculate_averages(all_results, args.n_runs)
+
     with open('data_gaussian.pkl', 'wb') as file:
         pickle.dump(average_data, file)
+
     if len(run_results) > 1:
         print(
             "Accuracy averaged over {} runs: {:.2f}% ± {:.2f}%".format(

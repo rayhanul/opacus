@@ -16,7 +16,7 @@ def plot_accuracy_over_iterations(data_R2DP, data_Gaussian, title="accuracy_over
     key=list(acc_r2dps.keys())
     r2dp=list(acc_r2dps.values())
     gaussian=list(acc_gaussian.values())
-
+    print(len(gaussian))
     plt.figure(figsize=(10, 6))
     plt.plot(key, r2dp, '-b', label='Accuracy R2DP')
     plt.plot(key, gaussian, '-r', label='Accuracy Gaussian')
