@@ -79,18 +79,25 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
         _, predicted = torch.max(output, 1)
         correct += (predicted == target).sum().item()
-        total += target.size(0)
+        # total += target.size(0)
 
-        accuracy = correct / total
+    accuracy = correct / len(train_loader.dataset)
 
     if not args.disable_dp:
         if args.type__accountant=='dma':
             epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.001, time=epoch)
+            print(
+                f"Train Epoch: {epoch} \t"
+                f"Loss: {np.mean(losses):.6f} "
+                f"Accuracy: {accuracy:.6f} "
+                f"(ε = {epsilon:.2f}, δ = {args.delta})"
+        )
         else:
             epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
             print(
                 f"Train Epoch: {epoch} \t"
                 f"Loss: {np.mean(losses):.6f} "
+                f"Accuracy: {accuracy:.6f} "
                 f"(ε = {epsilon:.2f}, δ = {args.delta})"
         )
         # eps_acc_results.update({epoch: {'epsilon': epsilon, 'acc': accuracy}})
@@ -175,7 +182,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=1000,
+        default=10,
         metavar="N",
         help="number of epochs to train",
     )
@@ -338,6 +345,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=1000', '--lr=.10', '--sigma=1.5', '-c=1.3', '-b=240', '--type--accountant=dma']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=10', '--lr=.10', '--sigma=1.5', '-c=1.3', '-b=240', '--type--accountant=dma']
 
     main()

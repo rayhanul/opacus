@@ -78,16 +78,16 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
         _, predicted = torch.max(output, 1)
         correct += (predicted == target).sum().item()
-        total += target.size(0)
 
-        accuracy = correct / total
+    accuracy = correct / len(train_loader.dataset)
 
     if not args.disable_dp:
         epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
-        if epoch%20==0:
+        if epoch%2==0:
             print(
                 f"Train Epoch: {epoch} \t"
                 f"Loss: {np.mean(losses):.6f} "
+                 f"Accuracy: {accuracy:.6f} "
                 f"(ε = {epsilon:.2f}, δ = {args.delta})"
             )
         return {'epsilon': epsilon, 'acc': accuracy}
@@ -168,7 +168,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=1000,
+        default=10,
         metavar="N",
         help="number of epochs to train",
     )
