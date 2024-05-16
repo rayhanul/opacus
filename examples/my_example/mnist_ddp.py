@@ -77,9 +77,10 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
         optimizer.step()
         losses.append(loss.item())
 
-        _, predicted = torch.max(output, 1)
-        correct += (predicted == target).sum().item()
-        # total += target.size(0)
+        pred = output.argmax(
+                dim=1, keepdim=True
+            )  # get the index of the max log-probability
+        correct += pred.eq(target.view_as(pred)).sum().item()
 
     accuracy = correct / len(train_loader.dataset)
 
@@ -155,7 +156,7 @@ def calculate_averages(data, num_runs):
     return {'epsilon':averages_epsilon, 'acc': averages_acc}
 
 def main():
-    b=np.random.gamma(14, 0.01, 1)
+    b=np.random.gamma(8, 0.01, 1)
     r2dp_noise=np.random.laplace(1/b)
 
     # Training settings
@@ -345,6 +346,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=1000', '--lr=.10', '-c=1.3', '-b=240', '--type-accountant=dma']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=10', '--lr=.10', '-c=1.3', '-b=240', '--type-accountant=dma']
 
     main()

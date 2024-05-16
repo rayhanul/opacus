@@ -76,8 +76,10 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
         optimizer.step()
         losses.append(loss.item())
 
-        _, predicted = torch.max(output, 1)
-        correct += (predicted == target).sum().item()
+        pred = output.argmax(
+                dim=1, keepdim=True
+            )  # get the index of the max log-probability
+        correct += pred.eq(target.view_as(pred)).sum().item()
 
     accuracy = correct / len(train_loader.dataset)
 
