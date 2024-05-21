@@ -156,7 +156,8 @@ def calculate_averages(data, num_runs):
     return {'epsilon':averages_epsilon, 'acc': averages_acc}
 
 def main():
-    b=np.random.gamma(8, 0.01, 1)
+    np.random.seed(42)
+    b=np.random.gamma(1, 5.0, 1) +  np.random.exponential(0.5, 1) + np.random.uniform(0, 1, 1)
     r2dp_noise=np.random.laplace(1/b)
 
     # Training settings
@@ -346,6 +347,6 @@ def main():
 if __name__ == "__main__":
     # python mnist.py --device=cpu -n=15 --lr=.25 --sigma=1.3 -c=1.5 -b=240
 
-    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=10', '--lr=.10', '-c=1.3', '-b=240', '--type-accountant=dma']
+    sys.argv=[os.path.basename(__file__), "--device=cpu", '-n=200', '--lr=.10', '-c=1.3', '-b=240', '--type-accountant=dma']
 
     main()
