@@ -13,13 +13,14 @@ def plot_accuracy_over_iterations(data_R2DP, data_Gaussian, title="accuracy_over
     acc_r2dps=data_R2DP['acc']
     acc_gaussian=data_Gaussian['acc']
     
-    key=list(acc_r2dps.keys())
+    key_r2dp=list(acc_r2dps.keys())
+    key_gaussian=list(acc_r2dps.keys())
     r2dp=list(acc_r2dps.values())
     gaussian=list(acc_gaussian.values())
     print(len(gaussian))
     plt.figure(figsize=(10, 6))
-    plt.plot(key, r2dp, '-b', label='Accuracy R2DP')
-    plt.plot(key, gaussian, '-r', label='Accuracy Gaussian')
+    plt.plot(key_r2dp, r2dp, '-b', label='Accuracy R2DP')
+    plt.plot(key_gaussian, gaussian, '-r', label='Accuracy Gaussian')
 
     plt.xlabel("Time")
     plt.ylabel("Accuracy")
@@ -40,13 +41,14 @@ def plot_epsilon_over_iterations(data_R2DP, data_Gaussian, title="epsilon_over_i
     acc_r2dps=data_R2DP['epsilon']
     acc_gaussian=data_Gaussian['epsilon']
     
-    key=list(acc_r2dps.keys())
+    key_r2dp=list(acc_r2dps.keys())
+    key_gaussian=list(acc_r2dps.keys())
     r2dp=list(acc_r2dps.values())
     gaussian=list(acc_gaussian.values())
     print(len(gaussian))
     plt.figure(figsize=(10, 6))
-    plt.plot(key, r2dp, '-b', label='Epsilon R2DP')
-    plt.plot(key, gaussian, '-r', label='Epsilon Gaussian')
+    plt.plot(key_r2dp, r2dp, '-b', label='Epsilon R2DP')
+    plt.plot(key_gaussian, gaussian, '-r', label='Epsilon Gaussian')
 
     plt.xlabel("Time")
     plt.ylabel("Epsilon")

@@ -30,6 +30,8 @@ from opacus import PrivacyEngine
 from torchvision import datasets, transforms
 from tqdm import tqdm
 
+from dynamic_noise_generator import generate_dynamic_noise 
+
 
 # Precomputed characteristics of the MNIST dataset
 MNIST_MEAN = 0.1307
@@ -147,6 +149,12 @@ def calculate_averages(data, num_runs):
 
 def main():
     # Training settings
+    np.random.seed(42)
+
+
+    noise = generate_dynamic_noise('optimized_usefulness/lmo_eps3.json')
+    noise = np.abs(noise[0])
+
     parser = argparse.ArgumentParser(
         description="Opacus MNIST Example",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -170,7 +178,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=10,
+        default=1000,
         metavar="N",
         help="number of epochs to train",
     )
@@ -241,6 +249,13 @@ def main():
         default="../mnist",
         help="Where MNIST is/will be stored",
     )
+
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=1.5,
+        help="The maximum epsilon to be spent",
+    )
     args = parser.parse_args()
     device = torch.device(args.device)
 
@@ -284,7 +299,7 @@ def main():
         privacy_engine = None
         eps_acc_results={}
         if not args.disable_dp:
-            privacy_engine = PrivacyEngine(secure_mode=args.secure_rng)
+            privacy_engine = PrivacyEngine(accountant="rdp", secure_mode=args.secure_rng)
             model, optimizer, train_loader = privacy_engine.make_private(
                 module=model,
                 optimizer=optimizer,
@@ -296,12 +311,16 @@ def main():
         for epoch in range(1, args.epochs + 1):
             data=train(args, model, device, train_loader, optimizer, privacy_engine, epoch)
             eps_acc_results.update({epoch:data})
+            if args.budget > 0 and data['epsilon'] >= args.budget :
+                
+                break 
+            
         all_results.update({run: eps_acc_results})
         run_results.append(test(model, device, test_loader))
         
     average_data= calculate_averages(all_results, args.n_runs)
-
-    with open('data_gaussian.pkl', 'wb') as file:
+    file_name=f'data_r2dp_{args.budget}.pkl'
+    with open(file_name, 'wb') as file:
         pickle.dump(average_data, file)
 
     if len(run_results) > 1:

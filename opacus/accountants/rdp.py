@@ -51,6 +51,7 @@ class RDPAccountant(IAccountant):
 
         if alphas is None:
             alphas = self.DEFAULT_ALPHAS
+        # print(f'number of steps: {self.history[0][2]}')
         rdp = sum(
             [
                 privacy_analysis.compute_rdp(
@@ -65,6 +66,7 @@ class RDPAccountant(IAccountant):
         eps, best_alpha = privacy_analysis.get_privacy_spent(
             orders=alphas, rdp=rdp, delta=delta
         )
+        # print(f'min eps:{eps}, and best alpha: {best_alpha}')
         return float(eps), float(best_alpha)
 
     def get_epsilon(
