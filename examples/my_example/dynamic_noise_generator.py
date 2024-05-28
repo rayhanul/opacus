@@ -37,5 +37,29 @@ def generate_dynamic_b(params, distributions, noise_size=1):
     
     return b
 
+
+def calculate_log_epsilon(epsilon, gamma):
+    """
+    Calculate the logarithmic expression given gamma and x.
+
+    Parameters:
+        gamma (float): The parameter gamma in the equation.
+        x (float): The exponent variable in the equation.
+
+    Returns:
+        float: The result of the logarithmic expression.
+    """
+    # Calculate the inner expression
+    inner_expression = 1 + gamma * (np.exp(epsilon) - 1)
+
+    # Calculate the logarithm of the inner expression
+    result = np.log(inner_expression)
+
+    return result
+
+
 # if __name__=="__main__":
-#     generate_dynamic_noise('optimized_usefulness/lmo_eps3.json')
+#     # generate_dynamic_noise('optimized_usefulness/lmo_eps3.json')
+
+#     epsilon = calculate_log_epsilon(0.24, 0.00426666666)
+#     print(epsilon)

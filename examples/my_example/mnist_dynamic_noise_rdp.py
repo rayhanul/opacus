@@ -63,6 +63,27 @@ class SampleConvNet(nn.Module):
 all_results={}
 eps_acc_results={}
 
+
+def get_log_epsilon(epsilon, gamma):
+    """
+    Calculate the logarithmic expression given gamma and x.
+
+    Parameters:
+        gamma (float): The parameter gamma in the equation.
+        x (float): The exponent variable in the equation.
+
+    Returns:
+        float: The result of the logarithmic expression.
+    """
+    # Calculate the inner expression
+    inner_expression = 1 + gamma * (np.exp(epsilon) - 1)
+
+    # Calculate the logarithm of the inner expression
+    result = np.log(inner_expression)
+
+    return result
+
+
 def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
     model.train()
     criterion = nn.CrossEntropyLoss()
@@ -87,6 +108,8 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
     if not args.disable_dp:
         epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
+        epsilon = get_log_epsilon(epsilon=epsilon, gamma=args.batch_size/60000)
+
         if epoch%2==0:
             print(
                 f"Train Epoch: {epoch} \t"
@@ -178,7 +201,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=1000,
+        default=210,
         metavar="N",
         help="number of epochs to train",
     )
@@ -200,7 +223,7 @@ def main():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=1.2,
+        default=noise,
         metavar="S",
         help="Noise multiplier",
     )
@@ -253,7 +276,7 @@ def main():
     parser.add_argument(
         "--budget",
         type=float,
-        default=1.5,
+        default=0,
         help="The maximum epsilon to be spent",
     )
     args = parser.parse_args()
@@ -319,7 +342,7 @@ def main():
         run_results.append(test(model, device, test_loader))
         
     average_data= calculate_averages(all_results, args.n_runs)
-    file_name=f'data_r2dp_{args.budget}.pkl'
+    file_name=f'data_r2dp_dynamic{args.budget}.pkl'
     with open(file_name, 'wb') as file:
         pickle.dump(average_data, file)
 
