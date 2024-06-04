@@ -75,19 +75,19 @@ def plot_epsilon_over_iterations(data_R2DP, data_Gaussian, title="epsilon_over_i
 if __name__=="__main__":
 
 
-    file_path=os.path.join(os.path.dirname(__file__), 'data_r2dp_dynamic0.5.pkl')
+    file_path=os.path.join(os.path.dirname(__file__), 'data_r2dp_dynamic1.0.pkl')
 
     with open(file_path, 'rb') as file:
         data_r2dp = pickle.load(file)
 
-    file_path=os.path.join(os.path.dirname(__file__), 'data_gaussian_0.5.pkl')
+    file_path=os.path.join(os.path.dirname(__file__), 'data_gaussian_1.pkl')
     with open(file_path, 'rb') as file:
         data_gaussian = pickle.load(file)
 
-    title="Accuracy over Epoch for Epsilon=0.5"
+    title="Accuracy over Epoch for Epsilon=1.0"
 
     plot_accuracy_over_iterations(data_R2DP=data_r2dp, data_Gaussian=data_gaussian, title=title)
 
-    title="Epsilon over Epoch with budget=0.5"
+    title="Epsilon over Epoch with budget=1.0"
 
     plot_epsilon_over_iterations(data_R2DP=data_r2dp, data_Gaussian=data_gaussian, title=title)
