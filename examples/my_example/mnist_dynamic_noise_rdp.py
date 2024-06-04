@@ -108,7 +108,7 @@ def train(args, model, device, train_loader, optimizer, privacy_engine, epoch):
 
     if not args.disable_dp:
         epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
-        epsilon = get_log_epsilon(epsilon=epsilon, gamma=args.batch_size/60000)
+        # epsilon = get_log_epsilon(epsilon=epsilon, gamma=args.batch_size/60000)
 
         if epoch%2==0:
             print(
@@ -223,7 +223,7 @@ def main():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=noise,
+        default=1.2,
         metavar="S",
         help="Noise multiplier",
     )
@@ -276,7 +276,7 @@ def main():
     parser.add_argument(
         "--budget",
         type=float,
-        default=0,
+        default=0.3,
         help="The maximum epsilon to be spent",
     )
     args = parser.parse_args()
