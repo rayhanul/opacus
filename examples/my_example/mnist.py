@@ -170,7 +170,7 @@ def main():
         "-n",
         "--epochs",
         type=int,
-        default=10,
+        default=3,
         metavar="N",
         help="number of epochs to train",
     )
@@ -301,7 +301,8 @@ def main():
         
     average_data= calculate_averages(all_results, args.n_runs)
 
-    with open('data_gaussian.pkl', 'wb') as file:
+    file_name=f'data_gaussian_sgima_{args.sigma}_epochs_{args.epochs}.pkl'
+    with open(file_name, 'wb') as file:
         pickle.dump(average_data, file)
 
     if len(run_results) > 1:
