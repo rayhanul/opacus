@@ -70,27 +70,8 @@ def plot_epsilon_over_iterations(data_R2DP, data_Gaussian, title="epsilon_over_i
     plt.show()
     plt.close()
 
-def plot_accuracy(data, is_inset=True, title="Accuracy_vs_Epochs"):
+def plot_accuracy(data, legends, line_styles, is_inset=True, title="Accuracy_vs_Epochs"):
 
-    legends={
-        "0.3" : "Gaussian noise with sigma=0.3", 
-        "0.5" :"Gaussian noise with sigma=0.5",
-        "0.8" : "Gaussian noise with sigma=0.8", 
-        "1.0": "Gaussian noise with sigma=1.0", 
-        "1.2":"Gaussian noise with sigma=1.2", 
-        "1.5":"Gaussian noise with sigma=1.5",
-        "0.0": "PLRV noise"
-    }
-
-    line_styles={
-        "0.3" : '-', 
-        "0.5" :'--',
-        "0.8" : (0, (3, 10, 1, 10, 1, 10)), 
-        "1.0": (0, (3, 5, 1, 5)), 
-        "1.2":(0, (1, 5,5, 3)), 
-        "1.5":(0, (3, 5, 1, 5)),
-        "0.0": (0, (5, 10))
-    }
 
     # if not is_inset: 
 
@@ -137,27 +118,9 @@ def plot_accuracy(data, is_inset=True, title="Accuracy_vs_Epochs"):
 
 
 
-def plot_epsilon(data, is_inset=True, title="Epsilon_vs_Epochs"):
+def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Epochs"):
 
-    legends={
-        "0.3" : "Gaussian noise with sigma=0.3", 
-        "0.5" :"Gaussian noise with sigma=0.5",
-        "0.8" : "Gaussian noise with sigma=0.8", 
-        "1.0": "Gaussian noise with sigma=1.0", 
-        "1.2":"Gaussian noise with sigma=1.2", 
-        "1.5":"Gaussian noise with sigma=1.5",
-        "0.0": "PLRV noise"
-    }
-
-    line_styles={
-                "0.3" : '-', 
-        "0.5" :'--',
-        "0.8" : (0, (3, 10, 1, 10, 1, 10)), 
-        "1.0": (0, (3, 5, 1, 5)), 
-        "1.2":(0, (1, 5,5, 3)), 
-        "1.5":(0, (3, 5, 1, 5)),
-        "0.0": (0, (5, 10))
-    }
+ 
 
     if not is_inset: 
 
@@ -207,8 +170,95 @@ def plot_epsilon(data, is_inset=True, title="Epsilon_vs_Epochs"):
     plt.show()
     plt.close()
 
+def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilon_vs_Epochs_with_budget"):
+
+    fig, axs = plt.subplots(2, 3, figsize=(20, 10))
+    for key, budget in enumerate(budgets):
+        ax = axs[key//3, key%3]
+
+        data_under_budget={}
+        for key, val in data.items():
+            val_key=val.keys()
+            val_values=list(val.values())
+
+            values_under_budget = [eps for eps in val_values if eps < budget]
+
+            data_under_budget.update({key: values_under_budget})
+
+        for key, val in data_under_budget.items():
+            val_key=range(0, len(val))
+
+        
+            ax.plot(val_key, val, label=legends[key], linestyle=line_styles[key])
+            ax.legend(loc='best')
+            subplot_title=f"Privacy budget={budget}"
+            ax.title.set_text(subplot_title)
+
+    file_name=f"{title}.png"
+    plt.tight_layout()
+    plt.savefig(file_name)
+    plt.show()
+    
+
+def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, noise, title):
+    fig, axs = plt.subplots(2, 2, figsize=(20, 10))
+    index=0
+    for budget in budgets:
+        data_under_budget={}
+        for sigma in noise:
+            epsilon_sigma=epsilon[sigma]
+            accuracy_sigma=accuracy[sigma]
+
+            combined_data = { epsilon_sigma[key]: accuracy_sigma[key] for key in epsilon_sigma}
+            under_budget={eps: acc for eps, acc in combined_data.items() if eps < budget}
+            data_under_budget.update({sigma: under_budget })
+
+            # for key, val in data_under_budget:
+            # plot_epsilon_given_budget(data_under_budget, budgets, legends, line_styles, title)
+
+            
+            
+        for sigma, data in data_under_budget.items():
+
+            ax = axs[index//2, index%2]
+            
+            
+            x_axis_data=list(data.keys())
+            y_axis_data=list(data.values())
+
+            ax.plot(x_axis_data, y_axis_data, label=legends[sigma], linestyle=line_styles[sigma])
+            ax.legend(loc='best')
+            subplot_title=f"Privacy budget={budget}"
+            ax.title.set_text(subplot_title)
+        
+        index = index+1 
+
+    file_name=f"{title}.png"
+    plt.tight_layout()
+    plt.savefig(file_name)
+    plt.show()
+
 if __name__=="__main__":
 
+    legends={
+        "0.3" : "Gaussian noise, $\sigma$=0.3", 
+        "0.5" :"Gaussian noise, $\sigma$=0.5",
+        "0.8" : "Gaussian noise, $\sigma$=0.8", 
+        "1.0": "Gaussian noise, $\sigma$=1.0", 
+        "1.2":"Gaussian noise, $\sigma$=1.2", 
+        "1.5":"Gaussian noise, $\sigma$=1.5",
+        "0.0": "PLRV noise"
+    }
+        
+    line_styles={
+        "0.3" : '-', 
+        "0.5" :'--',
+        "0.8" : (0, (3, 10, 1, 10, 1, 10)), 
+        "1.0": (0, (3, 5, 1, 5)), 
+        "1.2":(0, (1, 5,5, 3)), 
+        "1.5":(0, (3, 5, 1, 5)),
+        "0.0": (0, (5, 10))
+    }
     files= {
         "0.3" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
         "0.5" :"data_gaussian_sigma_0.5_epochs_1000.pkl",
@@ -218,6 +268,9 @@ if __name__=="__main__":
         "1.5":"data_gaussian_sigma_1.5_epochs_1000.pkl",
         "0.0": "data_r2dp_dynamic0.pkl"
     }
+
+    noise= ['0.3', '0.5', '0.8','1.0', '1.2','1.5', '0.0']
+
     data_epsilon={}
     data_accuracy={}
 
@@ -232,10 +285,13 @@ if __name__=="__main__":
 
     print("data reading done")
 
-    plot_epsilon(data_epsilon, True)
+    # plot_epsilon(data_epsilon, legends, line_styles, True)
     
-    plot_accuracy(data_accuracy, True)
+    # plot_accuracy(data_accuracy, legends, line_styles, True)
 
+    # plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
+
+    plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.5, 1, 2.0, 4.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
     # with open(file_path, 'rb') as file:
     #     data_r2dp = pickle.load(file)
 
