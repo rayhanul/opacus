@@ -1,0 +1,7 @@
+instructions: 
+systemctl --user enable docker-desktop
+
+systemctl --user start docker-desktop 
+
+systemctl --user stop docker-desktop
+
