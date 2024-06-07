@@ -82,8 +82,9 @@ def plot_accuracy(data, legends, line_styles, is_inset=True, title="Accuracy_vs_
         val_values=val.values()
         plt.plot(val_key, val_values, line_styles[key], label=legends[key])
 
-    plt.xlabel("Time")
-    plt.ylabel("Accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy (%)")
+    plt.grid(True)
     plt.title(title, fontsize=14, color='blue', fontweight='bold')
     plt.legend()
     plt.tight_layout()
@@ -132,7 +133,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
             plt.plot(val_key, val_values, line_styles[key], label=legends[key])
 
         plt.xlabel("Time")
-        plt.ylabel("Epsilon")
+        plt.ylabel('$\\epsilon$')
         plt.title(title, fontsize=14, color='blue', fontweight='bold')
         plt.legend()
         plt.tight_layout()
@@ -145,7 +146,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
 
         ax.set_title(title)
         ax.set_xlabel('Epoch')
-        ax.set_ylabel('Epsilon')
+        ax.set_ylabel('$\\epsilon$')
         ax.legend()
 
         # Create an inset within the main plot for the zoomed-in view
@@ -166,6 +167,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         ax_inset.set_ylim(np.min(val_values[:70]),15)
     
     file_name=f"{title}.png"
+    plt.grid(True)
     plt.savefig(file_name)
     plt.show()
     plt.close()
@@ -193,11 +195,14 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
             ax.legend(loc='best')
             subplot_title=f"Privacy budget={budget}"
             ax.title.set_text(subplot_title)
+            ax.set_xlabel('Epoch')
+            ax.set_ylabel('$\\epsilon$')
 
     file_name=f"{title}.png"
     plt.tight_layout()
     plt.savefig(file_name)
     plt.show()
+    # plt.close()
     
 
 def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, noise, title):
@@ -230,6 +235,8 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
             ax.legend(loc='best')
             subplot_title=f"Privacy budget={budget}"
             ax.title.set_text(subplot_title)
+            ax.set_ylabel('Accuracy (%)')
+            ax.set_xlabel('$\\epsilon$')
         
         index = index+1 
 
