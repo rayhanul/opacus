@@ -112,6 +112,7 @@ def plot_accuracy(data, legends, line_styles, is_inset=True, title="Accuracy_vs_
     #     ax_inset.set_ylim(np.min(val_values[:70]),15)
 
     file_name=f"{title}.png"
+    plt.title("Accuracy over Epochs")
     plt.savefig(file_name)
     plt.show()
     plt.close()
@@ -168,6 +169,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
     
     file_name=f"{title}.png"
     plt.grid(True)
+    plt.title("Epsilon over Epochs")
     plt.savefig(file_name)
     plt.show()
     plt.close()
@@ -199,6 +201,7 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
             ax.set_ylabel('$\\epsilon$')
 
     file_name=f"{title}.png"
+    # plt.title("Epsilon under given budget")
     plt.tight_layout()
     plt.savefig(file_name)
     plt.show()
@@ -244,7 +247,7 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
 
     plt.xlabel('$\\epsilon$')
     plt.ylabel('Accuracy (%)')
-    plt.title('(a) MNLI-m dataset')
+    # plt.title('Accuracy over epsilon')
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -254,58 +257,63 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
 if __name__=="__main__":
 
     legends={
-        "0.3" : "Gaussian noise, $\sigma$=0.3", 
+        # "0.3" : "Gaussian noise, $\sigma$=0.3", 
         "0.5" :"Gaussian noise, $\sigma$=0.5",
         "0.8" : "Gaussian noise, $\sigma$=0.8", 
         "1.0": "Gaussian noise, $\sigma$=1.0", 
         "1.2":"Gaussian noise, $\sigma$=1.2", 
         "1.5":"Gaussian noise, $\sigma$=1.5",
+        "1.7":"Gaussian noise, $\sigma$=1.7",
         "0.0": "PLRV noise"
     }
 
 
     line_styles4={
-        "0.3" : '-', 
+        # "0.3" : '-', 
         "0.5" :'--',
         "0.8" : ':', 
         "1.0": '-.', 
         "1.2": (0, (3, 5, 1, 5)), 
         "1.5":(0, (3, 5, 1, 5)),
+        "1.7" : '-',
         "0.0": (0, (3, 10, 1, 10, 1, 10))
     }
 
     line_styles44={
-        "0.3" : '-', 
+        # "0.3" : '-', 
         "0.5" :'--',
         "0.8" : ':', 
         "1.0": '-.', 
         "1.2": '-', 
         "1.5":'--',
+        "1.7" : '-',
         "0.0": ':'
     }
 
     line_styles={
-        "0.3" : 'k--', 
+        # "0.3" : 'k--', 
         "0.5" :'k-',
         "0.8" : '-', 
         "1.0": ':', 
         "1.2": '--', 
         "1.5":'-.',
+        "1.7" : '-',
         "0.0": '-'
     }
 
 
     files= {
-        "0.3" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
+        # "0.3" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
         "0.5" :"data_gaussian_sigma_0.5_epochs_1000.pkl",
         "0.8" : "data_gaussian_sigma_0.8_epochs_1000.pkl", 
         "1.0": "data_gaussian_sigma_1.0_epochs_1000.pkl", 
         "1.2":"data_gaussian_sigma_1.2_epochs_1000.pkl", 
         "1.5":"data_gaussian_sigma_1.5_epochs_1000.pkl",
+        "1.7":"data_gaussian_sigma_1.7_epochs_1000.pkl",
         "0.0": "data_r2dp_dynamic0.pkl"
     }
 
-    noise= ['0.3', '0.5', '0.8','1.0', '1.2','1.5', '0.0']
+    noise= [ '0.5', '0.8','1.0', '1.2','1.5', '1.7', '0.0']
 
     data_epsilon={}
     data_accuracy={}
