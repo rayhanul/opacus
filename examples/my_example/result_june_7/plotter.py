@@ -80,7 +80,7 @@ def plot_accuracy(data, legends, line_styles, is_inset=True, title="Accuracy_vs_
     for key, val in data.items():
         val_key=val.keys()
         val_values=val.values()
-        plt.plot(val_key, val_values, label=legends[key], linestyle=line_styles[key])
+        plt.plot(val_key, val_values, line_styles[key], label=legends[key])
 
     plt.xlabel("Time")
     plt.ylabel("Accuracy")
@@ -129,7 +129,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         for key, val in data.items():
             val_key=val.keys()
             val_values=val.values()
-            plt.plot(val_key, val_values, label=legends[key], linestyle=line_styles[key])
+            plt.plot(val_key, val_values, line_styles[key], label=legends[key])
 
         plt.xlabel("Time")
         plt.ylabel("Epsilon")
@@ -141,7 +141,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         for key, val in data.items():
             val_key=val.keys()
             val_values=val.values()
-            ax.plot(val_key, val_values, label=legends[key], linestyle=line_styles[key])
+            ax.plot(val_key, val_values, line_styles[key], label=legends[key])
 
         ax.set_title(title)
         ax.set_xlabel('Epoch')
@@ -154,7 +154,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         for key, val in data.items():
             val_key=list(val.keys())
             val_values=list(val.values())
-            ax_inset.plot(val_key[:70], val_values[:70], label=legends[key], linestyle=line_styles[key])
+            ax_inset.plot(val_key[:70], val_values[:70], line_styles[key], label=legends[key])
             
 
         # ax_inset.set_title('Zoomed View (0 to 100)')
@@ -189,7 +189,7 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
             val_key=range(0, len(val))
 
         
-            ax.plot(val_key, val, label=legends[key], linestyle=line_styles[key])
+            ax.plot(val_key, val, line_styles[sigma], label=legends[key])
             ax.legend(loc='best')
             subplot_title=f"Privacy budget={budget}"
             ax.title.set_text(subplot_title)
@@ -226,7 +226,7 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
             x_axis_data=list(data.keys())
             y_axis_data=list(data.values())
 
-            ax.plot(x_axis_data, y_axis_data, label=legends[sigma], linestyle=line_styles[sigma])
+            ax.plot(x_axis_data, y_axis_data, line_styles[sigma], label=legends[sigma])
             ax.legend(loc='best')
             subplot_title=f"Privacy budget={budget}"
             ax.title.set_text(subplot_title)
@@ -234,6 +234,12 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
         index = index+1 
 
     file_name=f"{title}.png"
+
+    plt.xlabel('$\\epsilon$')
+    plt.ylabel('Accuracy (%)')
+    plt.title('(a) MNLI-m dataset')
+    plt.legend()
+    plt.grid(True)
     plt.tight_layout()
     plt.savefig(file_name)
     plt.show()
@@ -249,20 +255,43 @@ if __name__=="__main__":
         "1.5":"Gaussian noise, $\sigma$=1.5",
         "0.0": "PLRV noise"
     }
-        
-    line_styles={
+
+
+    line_styles4={
         "0.3" : '-', 
         "0.5" :'--',
-        "0.8" : (0, (3, 10, 1, 10, 1, 10)), 
-        "1.0": (0, (3, 5, 1, 5)), 
-        "1.2":(0, (1, 5,5, 3)), 
+        "0.8" : ':', 
+        "1.0": '-.', 
+        "1.2": (0, (3, 5, 1, 5)), 
         "1.5":(0, (3, 5, 1, 5)),
-        "0.0": (0, (5, 10))
+        "0.0": (0, (3, 10, 1, 10, 1, 10))
     }
+
+    line_styles44={
+        "0.3" : '-', 
+        "0.5" :'--',
+        "0.8" : ':', 
+        "1.0": '-.', 
+        "1.2": '-', 
+        "1.5":'--',
+        "0.0": ':'
+    }
+
+    line_styles={
+        "0.3" : 'k--', 
+        "0.5" :'k-',
+        "0.8" : '-', 
+        "1.0": ':', 
+        "1.2": '--', 
+        "1.5":'-.',
+        "0.0": '-'
+    }
+
+
     files= {
         "0.3" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
         "0.5" :"data_gaussian_sigma_0.5_epochs_1000.pkl",
-        "0.8" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
+        "0.8" : "data_gaussian_sigma_0.8_epochs_1000.pkl", 
         "1.0": "data_gaussian_sigma_1.0_epochs_1000.pkl", 
         "1.2":"data_gaussian_sigma_1.2_epochs_1000.pkl", 
         "1.5":"data_gaussian_sigma_1.5_epochs_1000.pkl",
@@ -285,13 +314,15 @@ if __name__=="__main__":
 
     print("data reading done")
 
-    # plot_epsilon(data_epsilon, legends, line_styles, True)
+    plot_epsilon(data_epsilon, legends, line_styles, True)
     
-    # plot_accuracy(data_accuracy, legends, line_styles, True)
+    plot_accuracy(data_accuracy, legends, line_styles, True)
 
-    # plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
+    plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
 
     plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.5, 1, 2.0, 4.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
+    
+    
     # with open(file_path, 'rb') as file:
     #     data_r2dp = pickle.load(file)
 
