@@ -139,7 +139,7 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         plt.legend()
         plt.tight_layout()
     else:
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(12, 7))
         for key, val in data.items():
             val_key=val.keys()
             val_values=val.values()
@@ -167,7 +167,10 @@ def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Ep
         ax_inset.set_xlim(0, 60)
         ax_inset.set_ylim(np.min(val_values[:70]),15)
     
-    file_name=f"{title}.png"
+    if is_inset:
+        file_name=f"{title}_with_inset.png"
+    else: 
+        file_name=f"{title}.png"
     plt.grid(True)
     plt.title("Epsilon over Epochs")
     plt.savefig(file_name)
