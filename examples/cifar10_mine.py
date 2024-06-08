@@ -39,6 +39,8 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from torchvision.datasets import CIFAR10
 from tqdm import tqdm
 
+import pickle 
+
 
 logging.basicConfig(
     format="%(asctime)s:%(levelname)s:%(message)s",
@@ -194,10 +196,7 @@ def train(args, model, train_loader, optimizer, privacy_engine, epoch, device):
 
         if i % args.print_freq == 0:
             if not args.disable_dp:
-                if args.type__accountant=='rdp':
-                    epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta, k=14, theta=0.001, time=epoch)
-                else:
-                    epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
+                epsilon = privacy_engine.accountant.get_epsilon(delta=args.delta)
                 print(
                     f"\tTrain Epoch: {epoch} \t"
                     f"Loss: {np.mean(losses):.6f} "
@@ -211,7 +210,7 @@ def train(args, model, train_loader, optimizer, privacy_engine, epoch, device):
                     f"Acc@1: {np.mean(top1_acc):.6f} "
                 )
     train_duration = datetime.now() - start_time
-    return train_duration
+    return train_duration, np.mean(top1_acc) , np.mean(top1_acc), epsilon 
 
 
 def test(args, model, test_loader, device):
@@ -349,7 +348,9 @@ def main():
         else:
             max_grad_norm = args.max_per_sample_grad_norm
 
-        privacy_engine = PrivacyEngine( accountant="ddp", secure_mode=args.secure_rng,)
+        privacy_engine = PrivacyEngine(
+            secure_mode=args.secure_rng,
+        )
         clipping = "per_layer" if args.clip_per_layer else "flat"
         model, optimizer, train_loader = privacy_engine.make_private(
             module=model,
@@ -364,16 +365,18 @@ def main():
     # Store some logs
     accuracy_per_epoch = []
     time_per_epoch = []
-
+    data={}
     for epoch in range(args.start_epoch, args.epochs + 1):
         if args.lr_schedule == "cos":
             lr = args.lr * 0.5 * (1 + np.cos(np.pi * epoch / (args.epochs + 1)))
             for param_group in optimizer.param_groups:
                 param_group["lr"] = lr
 
-        train_duration = train(
+        train_duration, acc , loss, epsilon = train(
             args, model, train_loader, optimizer, privacy_engine, epoch, device
         )
+
+        data.update({epoch:{'accuracy':acc, 'epsilon': epsilon, 'loss': loss}})
         top1_acc = test(args, model, test_loader, device)
 
         # remember best acc@1 and save checkpoint
@@ -394,7 +397,10 @@ def main():
             is_best,
             filename=args.checkpoint_file + ".tar",
         )
-
+    # saving data to pickle file 
+    file_name=f'data_gaussian_cifar10_sigma_{args.sigma}_epochs_{args.epochs}.pkl'
+    with open(file_name, 'wb') as file:
+        pickle.dump(data, file)
     if rank == 0:
         time_per_epoch_seconds = [t.total_seconds() for t in time_per_epoch]
         avg_time_per_epoch = sum(time_per_epoch_seconds) / len(time_per_epoch_seconds)
@@ -598,16 +604,8 @@ def parse_args():
         help="debug level (default: 0)",
     )
 
-    parser.add_argument(
-        "--type--accountant",
-        type=str,
-        default=False ,
-        help="R2DP",
-    )
-
     return parser.parse_args()
 
 
 if __name__ == "__main__":
-    # sys.argv=[os.path.basename(__file__), "--device=cpu", '--lr=.10', '--sigma=1.5', '-c=1.3', '-b=240', '--type--accountant=dma']
     main()
