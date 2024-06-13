@@ -261,13 +261,13 @@ if __name__=="__main__":
 
     legends={
         # "0.3" : "Gaussian noise, $\sigma$=0.3", 
-        # "0.5" :"Gaussian noise, $\sigma$=0.5",
-        # "0.8" : "Gaussian noise, $\sigma$=0.8", 
+        "0.5" :"Gaussian noise, $\sigma$=0.5",
+        "0.8" : "Gaussian noise, $\sigma$=0.8", 
         "1.0": "Gaussian noise, $\sigma$=1.0", 
         "1.2":"Gaussian noise, $\sigma$=1.2", 
         "1.5":"Gaussian noise, $\sigma$=1.5",
         # "1.7":"Gaussian noise, $\sigma$=1.7",
-        # "0.0": "PLRV noise"
+        "0.0": "PLRV noise"
     }
 
 
@@ -295,29 +295,29 @@ if __name__=="__main__":
 
     line_styles={
         # "0.3" : 'k--', 
-        # "0.5" :'k-',
-        # "0.8" : '-', 
+        "0.5" :'k-',
+        "0.8" : '-', 
         "1.0": ':', 
         "1.2": '--', 
         "1.5":'-.',
         # "1.7" : '-',
-        # "0.0": '-'
+        "0.0": '-'
     }
 
 
     files= {
         # "0.3" : "data_gaussian_sigma_1.0_epochs_1000.pkl", 
-        # "0.5" :"data_gaussian_sigma_0.5_epochs_1000.pkl",
-        # "0.8" : "data_gaussian_sigma_0.8_epochs_1000.pkl", 
+        "0.5" :"data_gaussian_cifar10_sigma_0.5_epochs_1000.pkl",
+        "0.8" : "data_gaussian_cifar10_sigma_0.8_epochs_1000.pkl", 
         "1.0": "data_gaussian_cifar10_sigma_1.0_epochs_1000.pkl", 
         "1.2":"data_gaussian_cifar10_sigma_1.2_epochs_1000.pkl", 
         "1.5":"data_gaussian_cifar10_sigma_1.5_epochs_1000.pkl",
         # "1.7":"data_gaussian_sigma_1.7_epochs_1000.pkl",
-        # "0.0": "data_r2dp_dynamic0.pkl"
+        "0.0": "data_gaussian_cifar10_dynamic_noise_epochs_1000.pkl"
     }
 
     # noise= [ '0.5', '0.8','1.0', '1.2','1.5', '1.7', '0.0']
-    noise= [ '1.0', '1.2','1.5']
+    noise= [ '0.5','0.8', '1.0', '1.2','1.5', '0.0']
 
     data_epsilon={}
     data_accuracy={}
@@ -340,8 +340,8 @@ if __name__=="__main__":
     
     plot_accuracy(data_accuracy, legends, line_styles, True)
 
-    # plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
+    plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
 
-    # plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.5, 1, 2.0, 4.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
+    plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.5, 1, 2.0, 4.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
     
     
