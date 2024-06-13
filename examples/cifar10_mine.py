@@ -399,7 +399,8 @@ def main():
         )
     # saving data to pickle file 
     file_name=f'data_gaussian_cifar10_sigma_{args.sigma}_epochs_{args.epochs}.pkl'
-    with open(file_name, 'wb') as file:
+    file_path=os.path.join(os.path.dirname(__file__), file_name)
+    with open(file_path, 'wb') as file:
         pickle.dump(data, file)
     if rank == 0:
         time_per_epoch_seconds = [t.total_seconds() for t in time_per_epoch]
@@ -433,7 +434,7 @@ def parse_args():
     )
     parser.add_argument(
         "--epochs",
-        default=5,
+        default=1000,
         type=int,
         metavar="N",
         help="number of total epochs to run",
