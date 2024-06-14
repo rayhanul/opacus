@@ -196,7 +196,7 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
             val_key=range(0, len(val))
 
         
-            ax.plot(val_key, val, line_styles[sigma], label=legends[key])
+            ax.plot(val_key, val, line_styles[key], label=legends[key])
             ax.legend(loc='best')
             subplot_title=f"Privacy budget={budget}"
             ax.title.set_text(subplot_title)
@@ -209,7 +209,45 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
     plt.savefig(file_name)
     plt.show()
     # plt.close()
-    
+
+
+def plot_accuracy_given_budget(epsilon, accuracy, budgets, legends, line_styles, title="Epsilon_vs_Epochs_with_budget"):
+
+    fig, axs = plt.subplots(2, 3, figsize=(20, 10))
+    for key, budget in enumerate(budgets):
+        ax = axs[key//3, key%3]
+
+        data_under_budget={}
+        accuracy_under_budget={}
+        for inner_key, val in epsilon.items():
+            val_key=val.keys()
+            val_values=list(val.values())
+
+            values_under_budget = [eps for eps in val_values if eps < budget]
+
+            acc_under_budget = list(accuracy[inner_key].values())
+            acc_under_budget = acc_under_budget[0: len(values_under_budget)]
+
+            data_under_budget.update({inner_key: values_under_budget})
+            accuracy_under_budget.update({inner_key: acc_under_budget})
+
+        for key, val in data_under_budget.items():
+            val_key=range(0, len(val))
+
+        
+            ax.plot(val_key, val, line_styles[key], label=legends[key])
+            ax.legend(loc='best')
+            subplot_title=f"Privacy budget={budget}"
+            ax.title.set_text(subplot_title)
+            ax.set_xlabel('Epoch')
+            ax.set_ylabel('$\\epsilon$')
+
+    file_name=f"{title}.png"
+    # plt.title("Epsilon under given budget")
+    plt.tight_layout()
+    plt.savefig(file_name)
+    plt.show()
+    # plt.close() 
 
 def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, noise, title):
     fig, axs = plt.subplots(2, 2, figsize=(20, 10))
@@ -328,7 +366,7 @@ if __name__=="__main__":
             data = pickle.load(file)
 
             data_eps = { key:val['epsilon'] for key, val in data.items()}
-            data_acc = { key: val['epsilon'] for key, val in data.items()}
+            data_acc = { key: val['accuracy'] for key, val in data.items()}
 
             data_epsilon.update({sigma:data_eps})
             data_accuracy.update({sigma:data_acc})
@@ -341,7 +379,7 @@ if __name__=="__main__":
     plot_accuracy(data_accuracy, legends, line_styles, True)
 
     plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
-
+    plot_accuracy_given_budget(data_epsilon, data_accuracy, [0.3, 0.5, 0.8, 1, 1.5, 2.0], legends, line_styles)
     plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.5, 1, 2.0, 4.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
     
     
