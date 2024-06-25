@@ -193,7 +193,7 @@ def plot_accuracy_given_budget(epsilon, accuracy, budgets, legends, line_styles,
             val_key=val.keys()
             val_values=list(val.values())
 
-            values_under_budget = [eps for eps in val_values if round_down(eps,2) <= budget]
+            values_under_budget = [eps for eps in val_values if round_down(eps,2) < budget]
 
             acc_under_budget = list(accuracy[inner_key].values())
             acc_under_budget = acc_under_budget[0: len(values_under_budget)]
@@ -241,7 +241,7 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
             val_key=val.keys()
             val_values=list(val.values())
 
-            values_under_budget = [eps for eps in val_values if round_down(eps,2) <= budget]
+            values_under_budget = [eps for eps in val_values if round_down(eps,2) < budget]
 
             data_under_budget.update({key: values_under_budget})
 
@@ -286,7 +286,7 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
             accuracy_sigma=accuracy[sigma]
 
             combined_data = { epsilon_sigma[key]: accuracy_sigma[key] for key in epsilon_sigma}
-            under_budget={eps: acc for eps, acc in combined_data.items() if round_down(eps,2) <= budget}
+            under_budget={eps: acc for eps, acc in combined_data.items() if round_down(eps,2) < budget}
             data_under_budget.update({sigma: under_budget })
 
             # for key, val in data_under_budget:
