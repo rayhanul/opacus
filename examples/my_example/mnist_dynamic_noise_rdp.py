@@ -223,7 +223,7 @@ def main():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=1.2,
+        default=480,
         metavar="S",
         help="Noise multiplier",
     )
@@ -276,7 +276,7 @@ def main():
     parser.add_argument(
         "--budget",
         type=float,
-        default=0,
+        default=0.3,
         help="The maximum epsilon to be spent",
     )
     args = parser.parse_args()
