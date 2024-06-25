@@ -393,9 +393,9 @@ if __name__=="__main__":
 
     plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
 
-    # plot_accuracy_given_budget(data_epsilon, data_accuracy, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
+    plot_accuracy_given_budget(data_epsilon, data_accuracy, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
 
 
-    # plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
+    plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
     
     
