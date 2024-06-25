@@ -206,9 +206,10 @@ def plot_accuracy_given_budget(epsilon, accuracy, budgets, legends, line_styles,
         lmo_data= list(dynamic_data['acc'].values())
         
         data_under_budget.update({'0.0':lmo_data})
-        print(f"budget : {budget}")
+        accuracy_under_budget.update({'0.0':lmo_data})
+        # print(f"budget : {budget}")
 
-        for key, val in data_under_budget.items():
+        for key, val in accuracy_under_budget.items():
             val_key=range(0, len(val))
 
         
@@ -250,7 +251,8 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
         with open(file_path, 'rb') as file:
             dynamic_data = pickle.load(file)
         x= list(dynamic_data['epsilon'].values())
-        lmo_data=x 
+        # y = [val for val in x if val <= budget]
+        lmo_data=x
         data_under_budget.update({'0.0':lmo_data})
         print(f"budget : {budget}")
         for key, val in data_under_budget.items():
@@ -391,9 +393,9 @@ if __name__=="__main__":
 
     plot_epsilon_given_budget(data_epsilon, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
 
-    plot_accuracy_given_budget(data_epsilon, data_accuracy, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
+    # plot_accuracy_given_budget(data_epsilon, data_accuracy, [0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles)
 
 
-    plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
+    # plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, [ 0.3, 0.5, 0.8, 1.0, 1.5, 2.0], legends, line_styles, noise, title="Accuracy_vs_Epsilon")
     
     
