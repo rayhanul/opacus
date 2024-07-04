@@ -397,6 +397,8 @@ def main():
             is_best,
             filename=args.checkpoint_file + ".tar",
         )
+        if args.budget > 0 and epsilon >= args.budget :
+            break 
     # saving data to pickle file 
     file_name=f'data_gaussian_cifar10_sigma_{args.sigma}_epochs_{args.epochs}.pkl'
     file_path=os.path.join(os.path.dirname(__file__), file_name)
@@ -603,6 +605,12 @@ def parse_args():
         type=int,
         default=0,
         help="debug level (default: 0)",
+    )
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=2.0,
+        help="The maximum epsilon to be spent",
     )
 
     return parser.parse_args()
