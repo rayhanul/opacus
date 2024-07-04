@@ -348,7 +348,7 @@ def main():
         else:
             max_grad_norm = args.max_per_sample_grad_norm
 
-        privacy_engine = PrivacyEngine(
+        privacy_engine = PrivacyEngine(accountant="rdp",
             secure_mode=args.secure_rng,
         )
         clipping = "per_layer" if args.clip_per_layer else "flat"
@@ -513,7 +513,7 @@ def parse_args():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=1.5,
+        default=2.5,
         metavar="S",
         help="Noise multiplier (default 1.0)",
     )
