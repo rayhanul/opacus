@@ -511,11 +511,16 @@ def parse_args():
     parser.add_argument(
         "--seed", default=None, type=int, help="seed for initializing training. "
     )
-
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=3.0,
+        help="The maximum epsilon to be spent",
+    )
     parser.add_argument(
         "--sigma",
         type=float,
-        default=2.5,
+        default=4.0,
         metavar="S",
         help="Noise multiplier (default 1.0)",
     )
@@ -605,12 +610,6 @@ def parse_args():
         type=int,
         default=0,
         help="debug level (default: 0)",
-    )
-    parser.add_argument(
-        "--budget",
-        type=float,
-        default=2.0,
-        help="The maximum epsilon to be spent",
     )
 
     return parser.parse_args()
