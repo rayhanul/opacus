@@ -244,11 +244,12 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
         # x = [val for key, val in dynamic_data['epsilon'] if round_down(val,2) <= budget]
         lmo_data=y
         data_under_budget.update({'0.0':lmo_data})
+        t = len(data_under_budget['0.0'])
+        subplot_title=f"{plot_number}) $\\epsilon$={budget}, T = {t}, and $\\delta$=1e-5"
         for key, val in data_under_budget.items():
             val_key=range(0, len(val))
             ax.plot(val_key, val, line_styles[key], label=legends[key])
             ax.legend(loc='best')
-            subplot_title=f"{plot_number}) $\\epsilon$={budget}, T = {len(val)-1}, and $\\delta$=1e-5"
             ax.title.set_text(subplot_title)
             ax.set_xlabel('Epoch')
             ax.set_ylabel('$\\epsilon$')
@@ -396,14 +397,14 @@ if __name__=="__main__":
 
 
     print("data reading done")
-    budgets = [0.8,1.0,1.5,2.0]
+    budgets = [ 0.8,1.0,1.5,2.0]
     # plot_epsilon(data_epsilon, legends, line_styles, True)
     
     # plot_accuracy(data_accuracy, legends, line_styles, True)
 
-    # plot_epsilon_given_budget(data_epsilon, budgets, legends, line_styles)
+    plot_epsilon_given_budget(data_epsilon, budgets, legends, line_styles)
 
-    # plot_accuracy_given_budget(data_epsilon, data_accuracy, budgets, legends, line_styles)
+    plot_accuracy_given_budget(data_epsilon, data_accuracy, budgets, legends, line_styles)
 
 
     plot_accuracy_vs_epsilon(data_epsilon, data_accuracy, budgets, legends, line_styles, noise, title="Accuracy_vs_Epsilon")
