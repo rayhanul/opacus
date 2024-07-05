@@ -520,7 +520,7 @@ def parse_args():
     parser.add_argument(
         "--sigma",
         type=float,
-        default=4.0,
+        default=5.0,
         metavar="S",
         help="Noise multiplier (default 1.0)",
     )
