@@ -121,9 +121,6 @@ def plot_accuracy(data, legends, line_styles, is_inset=True, title="Accuracy_vs_
 
 
 def plot_epsilon(data, legends, line_styles, is_inset=True, title="Epsilon_vs_Epochs"):
-
- 
-
     if not is_inset: 
 
         plt.figure(figsize=(10, 6))

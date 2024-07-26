@@ -202,10 +202,10 @@ def plot_accuracy_given_budget(epsilon, accuracy, budgets, legends, line_styles,
             ax.set_ylabel('$Accuracy (\%)$')
         plot_number = plot_number + 1
         
-    file_name=f"{title}.png"
+    file_name=f"{title}.eps"
     # plt.title("Epsilon under given budget")
     plt.tight_layout()
-    plt.savefig(file_name)
+    plt.savefig(file_name, format='eps', dpi=300)
     plt.show()
     # plt.close() 
 
@@ -252,10 +252,10 @@ def plot_epsilon_given_budget(data, budgets, legends, line_styles, title="Epsilo
 
         plot_number = plot_number+1 
 
-    file_name=f"{title}.png"
+    file_name=f"{title}.eps"
     # plt.title("Epsilon under given budget")
     plt.tight_layout()
-    plt.savefig(file_name)
+    plt.savefig(file_name, format='eps', dpi = 300)
     plt.show()
     # plt.close()
     
@@ -308,7 +308,7 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
         plot_number = plot_number+1
         index = index+1 
 
-    file_name=f"{title}.png"
+    file_name=f"{title}.eps"
 
     plt.xlabel('$\\epsilon$')
     plt.ylabel('Accuracy (%)')
@@ -316,7 +316,7 @@ def plot_accuracy_vs_epsilon(epsilon, accuracy, budgets, legends, line_styles, n
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(file_name)
+    plt.savefig(file_name, format='eps', dpi=300)
     plt.show()
 
 if __name__=="__main__":
